@@ -1,5 +1,7 @@
 import "dotenv/config";
 import express from "express";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { applySecurityMiddleware, getCorsOrigin } from "./middleware/security.js";
@@ -80,6 +82,15 @@ io.on("connection", (socket) => {
     console.error(`[socket] error on ${socket.id}:`, err.message);
   });
 });
+
+// ─── Frontend ───────────────────────────────────────────────────────────────
+const clientDistPath = resolve(__dirname, "../../client/dist");
+if (existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get("*", (_req, res) => {
+    res.sendFile(resolve(clientDistPath, "index.html"));
+  });
+}
 
 // ─── 404 / Error handlers ────────────────────────────────────────────────────
 app.use((_req, res) => {

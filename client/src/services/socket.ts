@@ -1,13 +1,18 @@
 import { io, Socket } from "socket.io-client";
-import type { ClientToServerEvents, ServerToClientEvents } from "../types/socket";
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "../types/socket";
 
 export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 const SOCKET_URL =
   import.meta.env.VITE_SOCKET_URL ??
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://localhost:3001"
-    : "");
+  (typeof window !== "undefined"
+    ? window.location.hostname === "localhost"
+      ? "http://localhost:3001"
+      : window.location.origin
+    : "http://localhost:3001");
 
 let socket: AppSocket | null = null;
 
@@ -26,7 +31,7 @@ function attachConnectionDiagnostics(s: AppSocket): AppSocket {
 export function getSocket(): AppSocket {
   if (!socket) {
     socket = attachConnectionDiagnostics(
-      io(SOCKET_URL || "http://localhost:3001", {
+      io(SOCKET_URL, {
         autoConnect: false,
         reconnection: true,
         reconnectionAttempts: 10,
@@ -34,7 +39,7 @@ export function getSocket(): AppSocket {
         reconnectionDelayMax: 5000,
         timeout: 10000,
         transports: ["websocket", "polling"],
-      })
+      }),
     );
   }
   return socket;
