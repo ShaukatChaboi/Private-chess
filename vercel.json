@@ -1,6 +1,6 @@
 {
-  "installCommand": "npm ci",
-  "buildCommand": "npm run build --workspace=client",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm --filter private-chess-client build",
   "outputDirectory": "client/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }

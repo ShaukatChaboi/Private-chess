@@ -3,8 +3,8 @@ services:
     name: private-chess-server
     runtime: node
     plan: free
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV

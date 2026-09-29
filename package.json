@@ -2,19 +2,16 @@
   "name": "private-chess",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.9.0",
   "scripts": {
-    "dev": "concurrently --names \"SERVER,CLIENT\" --prefix-colors \"cyan,magenta\" \"npm run dev --workspace=server\" \"npm run dev --workspace=client\"",
-    "build": "npm run build --workspace=server && npm run build --workspace=client",
-    "start": "npm run start --workspace=server",
-    "typecheck": "npm run typecheck --workspace=server && npm run typecheck --workspace=client",
-    "lint": "npm run lint --workspace=server && npm run lint --workspace=client",
-    "test": "npm run test --workspace=server",
-    "install:all": "npm install && npm install --workspace=server && npm install --workspace=client"
+    "dev": "concurrently --names \"SERVER,CLIENT\" --prefix-colors \"cyan,magenta\" \"pnpm --filter private-chess-server dev\" \"pnpm --filter private-chess-client dev\"",
+    "build": "pnpm --filter private-chess-server build && pnpm --filter private-chess-client build",
+    "start": "pnpm --filter private-chess-server start",
+    "typecheck": "pnpm --filter private-chess-server typecheck && pnpm --filter private-chess-client typecheck",
+    "lint": "pnpm --filter private-chess-server lint && pnpm --filter private-chess-client lint",
+    "test": "pnpm --filter private-chess-server test",
+    "install:all": "pnpm install"
   },
-  "workspaces": [
-    "client",
-    "server"
-  ],
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
